@@ -1,6 +1,6 @@
-package com.fdse.is.sys.queue.service.impl;
+package com.fdse.is.sys.other1.service.impl;
 
-import com.fdse.is.sys.queue.service.UserService;
+import com.fdse.is.sys.other1.service.UserService;
 import org.springframework.stereotype.Service;
 
 /**
