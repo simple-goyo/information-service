@@ -6,12 +6,15 @@ import com.fdse.is.sys.queue.model.Queue;
 import com.fdse.is.sys.queue.model.QueueUser;
 import com.fdse.is.sys.queue.service.QueueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,5 +63,32 @@ public class QueueController {
         queueUser.setEntryTime(new Timestamp(System.currentTimeMillis()));
         queueService.saveQueueUser(queueUser);
         return queueUser.getId();
+    }
+    @RequestMapping("/turn")
+    public boolean isTurn(@RequestParam(name = "id") int id){
+        //根据用户排队id获取队列id和用户id
+        int queueId = queueService.getQueueIdById(id);
+        int userId = queueService.getQueueUserIdById(id);
+        //根据队列id查询队列上的用户列表
+        List<QueueUser> queueUsers = queueService.getQueueUsersByQueueId(queueId);
+        if(queueUsers.get(0).getUserId() == userId){
+            queueService.updateStartTimeAndState(new Timestamp(System.currentTimeMillis()),1);
+            return true;
+        }else{
+            //计算时间间隔
+            Date startDate = queueService.getStartTime(id);
+            long timeCell = System.currentTimeMillis() - startDate.getTime();
+            boolean overtime = timeCell/(1000*60) > queueService.getMaxTime(queueId);
+            if(overtime) {
+                //超时处理
+                queueService.updateQueueUser(id, 10);
+                QueueUser queueUser = new QueueUser();
+                queueUser.setQueueId(queueId);
+                queueUser.setUserId(userId);
+                queueUser.setEntryTime(new Timestamp(System.currentTimeMillis()));
+                queueService.saveQueueUser(queueUser);
+            }
+            return false;
+        }
     }
 }

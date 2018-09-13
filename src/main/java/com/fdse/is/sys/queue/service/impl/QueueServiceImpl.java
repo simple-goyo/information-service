@@ -8,6 +8,7 @@ import com.fdse.is.sys.queue.service.QueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -43,5 +44,40 @@ public class QueueServiceImpl implements QueueService{
     @Override
     public int saveQueueUser(QueueUser queueUser) {
         return queueUserMapper.insertQueueUser(queueUser);
+    }
+
+    @Override
+    public int getQueueUserIdById(int id) {
+        return queueUserMapper.getQueueUserIdById(id);
+    }
+
+    @Override
+    public int getQueueIdById(int id) {
+        return queueUserMapper.getQueueIdById(id);
+    }
+
+    @Override
+    public void updateQueueUser(int id,int state) {
+        return;
+    }
+
+    @Override
+    public List<QueueUser> getQueueUsersByQueueId(int queueId) {
+        return queueUserMapper.getQueueUsersByQueueId(queueId);
+    }
+
+    @Override
+    public Timestamp getStartTime(int id) {
+        return queueUserMapper.getStartTime(id);
+    }
+
+    @Override
+    public void updateStartTimeAndState(Timestamp startTime,int id) {
+        return;
+    }
+
+    @Override
+    public int getMaxTime(int queueId) {
+        return queueMapper.getMaxTime(queueId);
     }
 }

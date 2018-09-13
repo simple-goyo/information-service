@@ -1,5 +1,7 @@
 package com.fdse.is.sys.queue.model;
 
+import org.springframework.stereotype.Component;
+
 /**
  * <pre>
  *     author : shenbiao
@@ -9,6 +11,7 @@ package com.fdse.is.sys.queue.model;
  *     version: 1.0
  * </pre>
  */
+@Component
 public class Queue {
     private int id;
     private  Double longitude;
