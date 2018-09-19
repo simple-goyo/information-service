@@ -20,4 +20,7 @@ import java.util.List;
 public interface QueueMapper {
     @Select("SELECT * FROM q_queue WHERE q_queue.id IN (SELECT queueId FROM q_queue_commodity WHERE q_queue_commodity.commodityId =#{commodityId}) AND (6378137.0*ACOS(SIN(#{latitude}/180*PI())*SIN(q_queue.latitude/180*PI())+COS(#{latitude}/180*PI())*COS(q_queue.latitude/180*PI())*COS((#{longitude}-q_queue.longitude)/180*PI())))<q_queue.maxDistance ORDER BY q_queue.averageTime*(SELECT COUNT(*) FROM q_queue_user WHERE q_queue_user.state != 1 AND q_queue_user.queueId=q_queue.id)")
     List<Queue> findOptimalQueue(@Param("commodityId") int commodityId, @Param("longitude") Double longitude, @Param("latitude") Double latitude);
+
+    @Select("SELECT maxTime FROM q_queue WHERE id = #{queueId}")
+    int getMaxTime(int queueId);
 }
