@@ -52,9 +52,9 @@ public class QueueController {
             return 0;
         }
         //如果该用户已经在这个队列中则返回0
-        int count=queueService.getQueueUserByQueueIdAndUserId(optimalQueue.getId(),userId);
-        if(count>0){
-            return 0;
+        List<QueueUser> queueUserList=queueService.getQueueUserByQueueIdAndUserId(optimalQueue.getId(),userId);
+        if(queueUserList.size()>0){
+            return queueUserList.get(0).getId();
         }
         //保存该用户在这个队列中的排队信息
         QueueUser queueUser=new QueueUser();
@@ -65,7 +65,7 @@ public class QueueController {
         return queueUser.getId();
     }
     @RequestMapping("/turn")
-    public boolean isTurn(@RequestParam(name = "id") int id){
+    public boolean isTurn(@RequestParam(name = "queueUserId") int id){
         //根据用户排队id获取队列id和用户id
         int queueId = queueService.getQueueIdById(id);
         int userId = queueService.getQueueUserIdById(id);

@@ -37,8 +37,8 @@ public class QueueServiceImpl implements QueueService{
     }
 
     @Override
-    public int getQueueUserByQueueIdAndUserId(int queueId, int userId) {
-        return queueUserMapper.findQueueUserByQueueIdAndUserId(queueId,userId).size();
+    public List<QueueUser> getQueueUserByQueueIdAndUserId(int queueId, int userId) {
+        return queueUserMapper.findQueueUserByQueueIdAndUserId(queueId,userId);
     }
 
     @Override

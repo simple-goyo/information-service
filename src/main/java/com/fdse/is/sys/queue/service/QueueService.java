@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface QueueService {
     Queue getOptimalQueue(int commodityId,Double longitude,Double latitude);
-    int getQueueUserByQueueIdAndUserId(int queueId,int userId);
+    List<QueueUser> getQueueUserByQueueIdAndUserId(int queueId,int userId);
     int saveQueueUser(QueueUser queueUser);
     int getQueueUserIdById(int id);
     int getQueueIdById(int id);

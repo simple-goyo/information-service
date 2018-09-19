@@ -18,7 +18,8 @@ import java.util.List;
 @Mapper
 public interface QueueUserMapper {
 
-    @Select("SELECT * FROM q_queue_user WHERE queueId = #{queueId} AND userId = #{userId} ;")
+    //todo 已完成
+    @Select("SELECT * FROM q_queue_user WHERE queueId = #{queueId} AND userId = #{userId} AND state !=10 AND state !=11;")
     List<QueueUser> findQueueUserByQueueIdAndUserId(@Param("queueId") int queueId,@Param("userId") int userId);
 
     @Insert("INSERT INTO q_queue_user (`queueId`, `userId`, `entryTime`, `startTime`,`completeTime`,`state`) VALUES (#{queueId}, #{userId}, #{entryTime},#{startTime},#{completeTime},#{state});")
