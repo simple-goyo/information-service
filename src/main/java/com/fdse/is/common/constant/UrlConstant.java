@@ -18,7 +18,7 @@ public class UrlConstant {
     public static final String APP_BACK_END_IP = "192.168.1.148";//142
     public static final String APP_BACK_END_PORT = "8080";
 
-    //用户登录
+    //获取用户位置
     public static final String APP_BACK_END_USER_GET_LOCATION = "user/getLocation";
 
     public static String getAppBackEndServiceURL(String  service) {

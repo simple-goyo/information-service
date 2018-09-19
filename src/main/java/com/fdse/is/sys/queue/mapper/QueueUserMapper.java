@@ -17,6 +17,7 @@ import java.util.List;
 @Mapper
 public interface QueueUserMapper {
 
+    //todo 重新修改
     @Select("SELECT * FROM q_queue_user WHERE queueId = #{queueId} AND userId = #{userId} ;")
     List<QueueUser> findQueueUserByQueueIdAndUserId(@Param("queueId") int queueId,@Param("userId") int userId);
 
