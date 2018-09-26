@@ -41,6 +41,10 @@ public class QueueController {
     public Map<String,String> entry(@RequestParam(name = "userId") int userId,@RequestParam(name = "commodityId") int commodityId){
         //返回值
         Map<String,String> result=new HashMap<>();
+        if(true){
+            result.put("queueUserId", "11");
+            return result;
+        }
         //根据用户id去App后台获取用户位置信息
         String serviceURL = UrlConstant.getAppBackEndServiceURL(UrlConstant.APP_BACK_END_USER_GET_LOCATION);
         serviceURL+=("?userId="+userId);
@@ -72,7 +76,9 @@ public class QueueController {
         return result;
     }
     @RequestMapping("/turn")
-    public boolean isTurn(@RequestParam(name = "queueUserId") int id){
+    public Map<String,String> isTurn(@RequestParam(name = "queueUserId") int id){
+        //返回值
+        Map<String,String> result=new HashMap<>();
         //根据用户排队id获取队列id和用户id
         int queueId = queueService.getQueueIdById(id);
         int userId = queueService.getQueueUserIdById(id);
@@ -80,7 +86,8 @@ public class QueueController {
         List<QueueUser> queueUsers = queueService.getQueueUsersByQueueId(queueId);
         if(queueUsers.get(0).getUserId() == userId){
             queueService.updateStartTimeAndState(new Timestamp(System.currentTimeMillis()),queueUsers.get(0).getId());
-            return true;
+            result.put("curUserIsFirstInQueue", "true");
+            return result;
         }else{
             //计算时间间隔
             Date startDate = queueService.getStartTime(id);
@@ -95,7 +102,22 @@ public class QueueController {
                 queueUser.setEntryTime(new Timestamp(System.currentTimeMillis()));
                 queueService.saveQueueUser(queueUser);
             }
-            return false;
+
+
+            result.put("curUserIsFirstInQueue","false");
+            return result;
         }
+    }
+
+    @RequestMapping("/test1")
+    public String test1(@RequestParam(name = "puid") String puid){
+        puid+="1111";
+        return puid;
+    }
+
+    @RequestMapping("/test2")
+    public String test2(@RequestParam(name = "puid") String puid){
+        puid+="2222";
+        return puid;
     }
 }
