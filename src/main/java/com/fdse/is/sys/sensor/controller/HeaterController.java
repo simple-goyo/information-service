@@ -32,4 +32,7 @@ public class HeaterController {
     public boolean isEnoughWater(@RequestParam(name = "id") int id){
         return id%2 == 0;
     }
+
+
+
 }

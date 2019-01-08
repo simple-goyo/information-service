@@ -21,6 +21,9 @@ public class UrlConstant {
     //用户登录
     public static final String APP_BACK_END_USER_GET_LOCATION = "user/getLocation";
 
+    //发送消息
+    public static final String APP_BACK_END_SEND_MESSAGE_TO_MP = "user/getLocation";
+
     public static String getAppBackEndServiceURL(String  service) {
         String serviceURL = String.format("http://%s:%s/%s", APP_BACK_END_IP, APP_BACK_END_PORT, service);
         return serviceURL;
