@@ -15,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <pre>
@@ -36,7 +38,13 @@ public class QueueController {
     private QueueService queueService;
 
     @RequestMapping("/entry")
-    public int entry(@RequestParam(name = "userId") int userId,@RequestParam(name = "commodityId") int commodityId){
+    public Map<String,String> entry(@RequestParam(name = "userId") int userId,@RequestParam(name = "commodityId") int commodityId){
+        //返回值
+        Map<String,String> result=new HashMap<>();
+        if(true){
+            result.put("queueUserId", "11");
+            return result;
+        }
         //根据用户id去App后台获取用户位置信息
         String serviceURL = UrlConstant.getAppBackEndServiceURL(UrlConstant.APP_BACK_END_USER_GET_LOCATION);
         serviceURL+=("?userId="+userId);
@@ -49,12 +57,14 @@ public class QueueController {
         Queue optimalQueue=queueService.getOptimalQueue(commodityId, longitude, latitude);
         //如果不存在则返回0
         if(optimalQueue==null){
-            return 0;
+            result.put("queueUserId","0");
+            return result;
         }
         //如果该用户已经在这个队列中则返回0
         List<QueueUser> queueUserList=queueService.getQueueUserByQueueIdAndUserId(optimalQueue.getId(),userId);
         if(queueUserList.size()>0){
-            return queueUserList.get(0).getId();
+            result.put("queueUserId",queueUserList.get(0).getId()+"");
+            return result;
         }
         //保存该用户在这个队列中的排队信息
         QueueUser queueUser=new QueueUser();
@@ -62,18 +72,22 @@ public class QueueController {
         queueUser.setUserId(userId);
         queueUser.setEntryTime(new Timestamp(System.currentTimeMillis()));
         queueService.saveQueueUser(queueUser);
-        return queueUser.getId();
+        result.put("queueUserId", queueUser.getId()+"");
+        return result;
     }
     @RequestMapping("/turn")
-    public boolean isTurn(@RequestParam(name = "queueUserId") int id){
+    public Map<String,String> isTurn(@RequestParam(name = "queueUserId") int id){
+        //返回值
+        Map<String,String> result=new HashMap<>();
         //根据用户排队id获取队列id和用户id
         int queueId = queueService.getQueueIdById(id);
         int userId = queueService.getQueueUserIdById(id);
         //根据队列id查询队列上的用户列表
         List<QueueUser> queueUsers = queueService.getQueueUsersByQueueId(queueId);
         if(queueUsers.get(0).getUserId() == userId){
-            queueService.updateStartTimeAndState(new Timestamp(System.currentTimeMillis()),1);
-            return true;
+            queueService.updateStartTimeAndState(new Timestamp(System.currentTimeMillis()),queueUsers.get(0).getId());
+            result.put("curUserIsFirstInQueue", "true");
+            return result;
         }else{
             //计算时间间隔
             Date startDate = queueService.getStartTime(id);
@@ -88,7 +102,22 @@ public class QueueController {
                 queueUser.setEntryTime(new Timestamp(System.currentTimeMillis()));
                 queueService.saveQueueUser(queueUser);
             }
-            return false;
+
+
+            result.put("curUserIsFirstInQueue","false");
+            return result;
         }
+    }
+
+    @RequestMapping("/test1")
+    public String test1(@RequestParam(name = "puid") String puid){
+        puid+="1111";
+        return puid;
+    }
+
+    @RequestMapping("/test2")
+    public String test2(@RequestParam(name = "puid") String puid){
+        puid+="2222";
+        return puid;
     }
 }

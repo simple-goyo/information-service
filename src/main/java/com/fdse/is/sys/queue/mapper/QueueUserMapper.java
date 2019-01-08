@@ -36,11 +36,11 @@ public interface QueueUserMapper {
     int getQueueIdById(int id);
 
     @Update("UPDATE q_queue_user SET state = #{state} WHERE id = #{id}")
-    void updateQueueUser(int id,int state);
+    void updateQueueUser(@Param("id") int id,@Param("state") int state);
 
     @Select("SELECT entryTime FROM q_queue_user WHERE id = #{id}")
     Timestamp getStartTime(int id);
 
-    @Update("UPDATE q_queue_user SET state = 1 AND startTime = #{startTime} WHERE id = #{id}")
-    void updateStartTimeAndState(Timestamp startTime,int id);
+    @Update("UPDATE q_queue_user SET state = 1 , startTime = #{startTime} WHERE id = #{id}")
+    void updateStartTimeAndState(@Param("startTime") Timestamp startTime,@Param("id") int id);
 }

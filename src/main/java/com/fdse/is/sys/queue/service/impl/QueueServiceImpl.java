@@ -73,6 +73,7 @@ public class QueueServiceImpl implements QueueService{
 
     @Override
     public void updateStartTimeAndState(Timestamp startTime,int id) {
+        queueUserMapper.updateStartTimeAndState(startTime,id);
         return;
     }
 
